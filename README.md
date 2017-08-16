@@ -1,1 +1,1 @@
-# muiltscale waveform inversion
+# Multiscale Waveform Inversion
