@@ -1,0 +1,226 @@
+!-----------------------------------------------------------------------
+! change the following parameters if necessary                       
+!-----------------------------------------------------------------------
+! nx_mod0,nz_mod0,dx0 --- input model size and grid size
+! nt0,dt0             --- input samples per trace and the sampling rate
+! ns0,ng0             --- maximum shot number and receiver number
+! ns0_node            --- maximum shots for one node
+      integer nx_mod0, nz_mod0, nt0, ng0, ns0, ns0_node
+      parameter( nx_mod0=501,nz_mod0=101)
+      parameter( nt0=3000,ng0=201,ns0=51,ns0_node=51)
+
+! nx_mod,nz_mod,dx --- output model size and grid size
+! nt_max,dt           --- output samples per trace and the sampling rate
+! na_add : this parameter is only for marine data in which
+!        : the input velocity starts from the source and 
+!        : receiver depth, which is under the water level, so the 
+!        : layers from the surface to the source and receiver depth
+!        : should be added. For example, source at depsou=10 m, dx=2, 
+!        : na_add=depsou/dx=5
+      integer npad_shot, na_add, nx_mod, nz_mod, nt_max, nt_max2
+      parameter(npad_shot=0)
+      parameter(na_add=0 )
+      parameter(nx_mod=501,nz_mod=101+na_add)
+      parameter(nt_max=3000)
+      parameter(nt_max2=nt_max)
+
+! nx_shot,nz_shot-- maximum model size for one shot
+      integer nx_shot, nz_shot
+      parameter(nx_shot=501+npad_shot*2, nz_shot=nz_mod)
+
+! airvel: typical surface wave
+      integer ntaper, nerr_pick
+      real airvel, pi, waterlevel
+      parameter(airvel=1400.0)
+      parameter(pi=3.141592654)
+      parameter(ntaper=10)
+      parameter(nerr_pick=10)
+      parameter(waterlevel=0.0001)
+
+!-----------------------------------------------------------------------
+! need not change the following parameters
+!-----------------------------------------------------------------------
+! na_pml  : PML layers
+! na_pad  : pad layers before PML layers
+! na_new  : total paded layers
+! na_store: paded layers need to be stored during gradient calculation
+! nx0,nz0 : work model size for shots
+! nbord0  : size needed for storingthe boundaries
+      integer na_pml, na_pad, na_new, na_store, nx0, nz0, nbord0
+      parameter(na_pml=40,na_pad=2)
+      parameter(na_new=na_pml+na_pad)
+      parameter(na_store=na_pml)
+      parameter(nx0=nx_shot+2*na_new,nz0=nz_shot+2*na_new)
+      parameter(nbord0=9*nx0+6*nz0-30*na_store)
+
+!-----------------------------------------------------------------------
+! data_real : array for broadcast the real data read out by node 0
+! data_int  : ........................integer.....................
+      integer data_int(100)
+      real data_real(100)
+      common/bcast/data_int,data_real
+
+!-----------------------------------------------------------------------
+! file names
+!-----------------------------------------------------------------------
+! coord_temp : geometry file name (shot# rec# xs zs xg zg tsg)
+! vel_in     : initial velocity file name
+! csg_pre    : prefix for CSG file
+! csg_suffix : suffix ............
+! source_in  : input source wavelet file name
+! density_in : ..... density file name
+! source_ou  : output inversed source wavelet file name
+! syn_ou_pre : output synthetic file prefix
+! syn_ou_suffix:.....................suffix
+! vel_ou_pre : output waveform tomogram file prefix
+! vel_ou_suffix: output waveform tomogram file suffix
+! grad_ou    : output gradient file name
+! wtw_ou     : output message file
+! res_wave   : output waveform residual file name
+      character*200 coord_temp,vel_in,csg_pre,csg_suffix,
+     1  source_in,source_ou,density_in,syn_ou_pre,syn_ou_suffix,
+     2  vel_ou_pre,vel_ou_suffix,grad_ou,wtw_ou,res_wave,waterBottomFile
+      common/file/coord_temp,vel_in,csg_pre,csg_suffix,
+     1  source_in,source_ou,density_in,syn_ou_pre,syn_ou_suffix,
+     2  vel_ou_pre,vel_ou_suffix,grad_ou,wtw_ou,res_wave,waterBottomFile
+
+!-----------------------------------------------------------------------
+! nx,nz --- work model dimension for individual shots
+! nx_tot,nz_tot --- work dimension for whole model
+! array for whole model:
+!    velocity, density
+!    g1,d2,g1old,g1tmp,vdump,wafic: for gradient calculation and step searching
+! array for individual shots:
+!    c1,c2,cl,den,p2,cl41,cl42,u1,w1
+! PML arrays:
+!    p2xL,p2xR,p2yL,p2yR,p2xT,p2yT,p2xB,p2yB,exL,exR,eyT,eyB
+      real velocity(nx_mod, nz_mod), density(nx_mod, nz_mod),
+     1  vdump(nx_mod, nz_mod), g1(nx_mod, nz_mod), d2(nx_mod, nz_mod),
+     2  g1old(nx_mod,nz_mod),g1tmp(nx_mod,nz_mod),wafic(nx_mod,nz_mod),
+     3  c1(nx0,nz0),c2(nx0,nz0),cl(nx0,nz0),den(nx0,nz0),p2(nx0,nz0),
+     4  cl41(nx0,nz0),cl42(nx0,nz0),u1(nx0,nz0),w1(nx0,nz0),
+     5  p2xL(na_pml,nz0),p2xR(na_pml,nz0),
+     6  p2yL(na_pml,nz0),p2yR(na_pml,nz0),
+     7  p2xT(nx0,na_pml),p2yT(nx0,na_pml),
+     8  p2xB(nx0,na_pml),p2yB(nx0,na_pml),
+     9  exL(na_pml,nz0),exR(na_pml,nz0),
+     1  eyT(nx0,na_pml),eyB(nx0,na_pml)
+      common/model/velocity,density,vdump,g1,d2,g1old,g1tmp,wafic
+      common/field/c1,c2,cl,den,p2,cl41,cl42,u1,w1,p2xL,p2xR,p2yL,p2yR,
+     1  p2xT,p2yT,p2xB,p2yB,exL,exR,eyT,eyB
+
+!-----------------------------------------------------------------------
+! ns,ngis: shots will be used, receiver numbers
+! arrays for geometry:
+!   nxss,nzss,nxg,nzg,xss,zss,xgg,zgg
+!   offset,tr: offset and first arrival traveltime
+      integer ns, ng, nxss(ns0), nzss(ns0), ngis(ns0), nxg(ng0,ns0),
+     1  nzg(ng0,ns0)
+      real xss(ns0), zss(ns0), xgg(ng0,ns0), zgg(ng0,ns0), tr(ng0,ns0),
+     1  offset(ng0,ns0)
+      common/geometry/ns,ng,nxss,nzss,xss,zss,
+     1  ngis,nxg,nzg,xgg,zgg,tr,offset
+
+! shot and source wavelet
+! ntpsou : time samples after first arrivals
+      integer nts, nxs, nzs, is, is00, is_su_csg, is_first, is_end,
+     1  nopsou, ntpsou, ntpad, nshot_int, ns_work, indgeop(ns0_node),
+     2  indshot(ns0), ix1_shot(ns0), ix2_shot(ns0),itmmm(ng0,ns0_node),
+     3  ntdel(ns0_node)
+      real vm, sou(ns0_node,nt_max), g1s(nt_max), g1old2(nt_max),
+     1  g1tmp2(nt_max)
+      common/shot/nts,nxs,nzs,is,is00,is_su_csg,is_first,is_end,
+     1  nopsou,vm,ntpsou,ntpad,nshot_int,ns_work,indgeop,
+     2  indshot,ix1_shot,ix2_shot,itmmm,ntdel,sou,g1s,g1old2,g1tmp2
+
+! surface definition
+      integer nsurf_tot(nx_mod), nsurf(nx0), nwater(nx_mod)
+      common/surf/nsurf_tot,nsurf,nwater
+
+! waveform data
+! wr,wc: original, and synthetic waveform data
+! dw:    waveform residual
+! wweight: weight for the residuals
+      real wr(nt_max,ng0,ns0_node),wc(nt_max,ng0),dw(nt_max,ng0),
+     1  wweight(ng0,ns0_node),wsmooth
+      common/waveform/wr,wc,dw,wweight,wsmooth
+
+!-----------------------------------------------------------------------
+! control parameters
+!-----------------------------------------------------------------------
+! nx_in,nz_in : whole model size variables(input)
+! nx_tot,nz_tot : whole model size variables
+! nx,nz         : individual shots
+! nt,nt_work    : time sample number input and output
+! nfree: 1/0 with/without free surface condition
+! iter00: starting from the iter00-th iteration
+! nit,iter: total iteration,iteration
+! nite: every nite shots will be used to calculate the step length
+! ishot_out: shot synthetics to be output
+      integer nx_in,nz_in,nx_tot,nz_tot,nx,nz,nt,nt_work,nfree,
+     1  iter00,iter,nit,nite,ishot_out
+      common/contr1/nx_in,nz_in,nx_tot,nz_tot,nx,nz,nt,nt_work,nfree,
+     1  iter00,iter,nit,nite,ishot_out
+
+!-----------------------------------------------------------------------
+! dt1,dt : input and output sampling rate
+! dx1,dx : input and output grid size
+! dtx=dt/dx
+! ndens: density input parameter, 0:calculate,1:input
+      integer ndens
+      real dt1,dt,dx1,dx,dxm,dtx,denco,cp00,denp
+      common/contr4/dt1,dt,dx1,dx,dxm,dtx,ndens,denco,cp00,denp
+
+!-----------------------------------------------------------------------
+! ispre -- 1. recorded is the pressure data 0. partical velocity
+! isusenorm1 --- selection for the objective function
+! isuseconjugate --- 1/0 with/without conjugate gradient method
+! isuseprecondition --- 1/0 with/without precondition
+! is_marine,is_reset_surface,is_reset_sg,
+!           :1/0 needs or needn't reset the surface
+! depsou,deprec:  source and receiver depth from the water surface
+! isfixeddensity --- 1/0 density won't/will be updated during iteration
+! is_use_constraint1 --- 1/0 with/without shallow velocity constraint
+!                        like water velocity
+! depth_constraint1,vmin_constraint1,vmax_constraint1
+!                --- depth up to depth_constraint1
+!                --- constraint with vmin_constraint1,vmax_constraint1
+      integer ispre,isusenorm,isuseconjugate,isuseprecondition,
+     1  isepow,is_marine,is_reset_surface,is_reset_sg,
+     2  isfixeddensity,is_use_constraint1,is_use_water_bottom
+      real depsou,deprec,depth_constraint1,vmin_constraint1,
+     1  vmax_constraint1
+      common/contr2/ispre,isusenorm,isuseconjugate,isuseprecondition,
+     1  isepow,is_marine,is_reset_surface,is_reset_sg,depsou,deprec,
+     2  isfixeddensity,is_use_constraint1,depth_constraint1,
+     3  vmin_constraint1,vmax_constraint1,is_use_water_bottom
+
+!-----------------------------------------------------------------------
+! xmin,xmax,zmin,zmax --- model range
+! offmin,offmax: minimum and maximum offset
+! nxm1,nxm2,nzm1,nzm2: model range without padding
+! nxm10,nxm20,nzm10,nzm20: model range without PML 
+! vmin,vmax --- minimum and maximum velocity
+! dvmin,dvmax --- minimum and maximum velocity update
+! pur: optimal step length
+      integer ngmax, nxm1,nxm2,nzm1,nzm2,nxm10,nxm20,nzm10,nzm20
+      real xmin,xmax,zmin,zmax,offmin,offmax,vmin,vmax,dvmin,dvmax,pur
+      common/contr3/xmin,xmax,zmin,zmax,ngmax,offmin,offmax,
+     1  nxm1,nxm2,nzm1,nzm2,nxm10,nxm20,nzm10,nzm20,
+     1  vmin,vmax,dvmin,dvmax,pur
+
+!-----------------------------------------------------------------------
+      integer nopx,noz1,noz2,k0,na,nzorig, nt_fft
+      real xxcor(nx_mod),zzcor(nz_mod),convwrwc(nt_max*2),
+     1  bord4(nbord0,nt_max), dfreq, gauss(4*nt_max),wtr(4*nt_max),
+     2  traceind(nt_max*4),taper1(ntaper),taper2(ntaper)
+      complex xcmp(4*nt_max),xcmp0(4*nt_max)
+      common/dump/xxcor,zzcor,convwrwc
+      common/bor4/bord4,nopx,noz1,noz2,k0,na,nzorig
+      common/fft_wtw/xcmp,xcmp0,nt_fft,dfreq,gauss,
+     1  wtr,traceind,taper1,taper2
+
+!-----------------------------------------------------------------------
+      integer timeshift
+      common/modeling/timeshift
+

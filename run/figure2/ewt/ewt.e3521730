@@ -1,0 +1,7 @@
+Restoring modules to user's default
+Restoring modules to user's default
+Restoring modules to user's default
+At line 144 of file rdwt.f (unit = 40, file = '')
+Fortran runtime error: RECL parameter is non-positive in OPEN statement
+
+Backtrace for this error:

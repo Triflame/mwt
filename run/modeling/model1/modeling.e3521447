@@ -1,0 +1,28 @@
+Lmod has detected the following error: These module(s) exist but cannot be
+loaded as requested: "openmpi/1.10.1"
+
+   Try: "module spider openmpi/1.10.1" to see how to load the module(s).
+
+
+
+
+
+Lmod has detected the following error: These module(s) exist but cannot be
+loaded as requested: "openmpi/1.10.1"
+
+   Try: "module spider openmpi/1.10.1" to see how to load the module(s).
+
+
+
+
+
+Lmod has detected the following error: These module(s) exist but cannot be
+loaded as requested: "openmpi/1.10.1"
+
+   Try: "module spider openmpi/1.10.1" to see how to load the module(s).
+
+
+
+
+
+/var/spool/torque/mom_priv/jobs/3521447.torque01.util.production.int.aci.ics.psu.edu.SC: line 17: mpirun: command not found

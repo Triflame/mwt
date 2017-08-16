@@ -1,0 +1,8 @@
+Restoring modules to user's default
+Restoring modules to user's default
+Restoring modules to user's default
+In file included from tomo2d_mpi_new.c:9:0:
+par_sjm.h: In function 'tabulate':
+par_sjm.h:375:9: warning: ignoring return value of 'realloc', declared with attribute warn_unused_result [-Wunused-result]
+         realloc(argtbl,nargs*sizeof(pointer_table));
+         ^

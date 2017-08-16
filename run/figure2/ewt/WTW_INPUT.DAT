@@ -1,0 +1,85 @@
+#INPUT FILE NAMES
+COORD_TEMP=../../../model/model1/coord.dat
+VEL_IN=../../../model/model1/vel_grad.dat
+CSG_PRE_IN=../../../data/model1/10HZ/csg
+CSG_SUFFIX_IN=.su
+SOURCE_IN=../../../data/wavelet/DT0.0008/src10.dat
+DENSITY_IN =
+
+#OUTPUT FILE NAMES
+WTW_OU = ./wtw.ou
+RES_WAVEFORM = ./res.DAT
+SYN_OU_PRE = ./CSG_OUT.
+SYN_OU_SUFFIX =
+VEL_OU_PRE = ./vel.
+VEL_OU_SUFFIX = 
+GRAD_OU = ./grad.dat
+
+#MODEL PARAMETERS
+#input model size
+Nx_IN,Nz_IN,Dx_IN=501,101,5
+
+#input trace
+# IS_SU_CSG		=1 data is in SU format, 0 binary format
+Nt_IN,Dt_IN,IS_SU_CSG=3000,0.0008,1
+
+#work grid size
+#Dx < vmin/fpeak/15 or Dx < vmin/fmax/5
+#Dt<=0.6*Dx/vmax
+Dx_OUT,Dt_OUT=5,0.0008
+
+#DATA PARAMETERS
+# FIRST_SHOT_INDEX	the index of the first shot associated with that in coord.temp
+# ISMARINE		=1 marine data, 0 land data
+# DEPSOU,DEPREC		the shot and receiver depths, only for marine data
+ISMARINE = 0
+IS_RESET_SURFACE,IS_RESET_SG = 0,0
+DEPSOU,DEPREC = 10.0,10.0
+
+#SOURCE PARAMETERS
+#NOPSOU -- =0 use ricker wavelet
+#          =1 read source wavelet from the data file wave.new, it's the same for all shots
+#          =2 read from one file, source wavelets are different for different shots
+#          =3 read from files, one file each shot
+#FREQ   --   peak frequency of Ricker wavelet (hz)
+NOPSOU,FREQ,NTPSOU,DTSOU = 1,10.0,1251,0.0008
+NTPAD=1
+
+#DENSITY PARAMETERS
+#ndens --  =0 set density value from data file and fixed in inversion.
+#          =1 set density value by experimental formula:
+#          den(i,j)/10**3=denco*(cp(i,j)/cp00)**denp
+#NDENS,DENCO,CP00,DENP = 1,2100.0,2000.0,0.5
+
+#FREE SURFACE
+#nfree --  =1 set free surface
+#          =0 no free surface, all four sides are absorbing boundaries
+NFREE = 1
+
+#CONTROL PARAMETERS 
+#ITERATION,ITER00		the total iteration number, and the initial iteration #.
+#IS_USE_CON1,DEPTH_CON1,VMIN_CON1,VMAX_CON1
+#				IS_USE_CON1=1, above depth DEPTH_CON1
+#                  		is constrained by VMIN_CON1 <= v <= VMAX_CON1
+# NSBEG,NSEND 		the shots from #NSBEG to # NSEND will be used to invert
+# NITE			every NITE shots will be used to calculate the steps
+# ISPRE,ISNORM,ISUSECONJUGATE,ISEPOW
+#			ISPRE = 1 pressure data, 0 particle velocity data
+#			ISNORM = 1 L1 norm, 0 correlation, 2 L2 norm
+#			ISUSECONJUGATE = 1 use conjugate gradient, 0 no
+#			ISEPOW = 1 weight the trace with exp(-(t/tr)**2), 0 no
+ITERATION,ITER00 = 100,1
+#ITERATION,ITER00 = 1,1
+NITE = 10
+IS_USE_CON1 = 0
+DEPTH_CON1,VMIN_CON1,VMAX_CON1 = 40.0,1490.0,1490.0
+DVMIN,DVMAX,VMIN,VMAX = 6.0,30.0,1400.0,3000.0
+#XMIN,ZMIN=800.0,0.0
+#XMAX=1700.0
+#OFFMIN,OFFMAX = 20.0,1000.0
+ISPRE,ISNORM,ISUSECONJUGATE = 1,0,0
+ISPRECONDITION,ISEPOW = 0,0
+# INDEX_SHOT_OUTPUT is used for numbering the output files
+INDEX_SHOT_OUTPUT=51
+
+SHIFT=0

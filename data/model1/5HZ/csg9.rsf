@@ -1,0 +1,25 @@
+2.0	sfsuread	data/model1/5HZ:	yxy274@aci-lgn-006.acib.production.int.aci.ics.psu.edu	Tue Aug 15 08:41:55 2017
+
+	d2=1
+	o1=0
+	n2=201
+	o2=0
+	label1="Time"
+	data_format="native_float"
+	head="tfile"
+	label2="Trace"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.000799
+	n1=3000
+	in="stdin"
+
+2.0	sfput	data/model1/5HZ:	yxy274@aci-lgn-006.acib.production.int.aci.ics.psu.edu	Tue Aug 15 08:41:55 2017
+
+	in="/storage/home/yxy274/var/tmp/data/model1/5HZ/csg9.rsf@"
+	label1=time
+	data_format="native_float"
+	unit1=s
+	label2=distance
+	unit2=m

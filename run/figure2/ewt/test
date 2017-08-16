@@ -1,0 +1,66 @@
+[1502827361.673239] [comp-sc-0459:84508:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+[1502827361.674637] [comp-sc-0459:84508:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+[1502827361.704664] [comp-sc-0459:84507:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+[1502827361.706308] [comp-sc-0459:84507:0]         mxm.c:196  MXM  WARN  The 'ulimit -s' on the system is set to 'unlimited'. This may have negative performance implications. Please set the stack size to the default value (10240) 
+   0.0000000       2500.0000       0.0000000       500.00000       0.0000000      -1.0000000    
+         501         501         501
+         501         101         501         101
+ xmin =    0.0000000     , xmax =    2500.0000    
+ offmin =    10.000000     , offmax =    990.00000    
+ nt_work =         3000
+ iter=           0  resddd=   23362.586      diff=   99.999763               0
+--------------------------------------------------------------------------
+An MPI process has executed an operation involving a call to the
+"fork()" system call to create a child process.  Open MPI is currently
+operating in a condition that could result in memory corruption or
+other system errors; your MPI job may hang, crash, or produce silent
+data corruption.  The use of fork() (or system() or other calls that
+create child processes) is strongly discouraged.  
+
+The process that invoked fork was:
+
+  Local host:          comp-sc-0459 (PID 84507)
+  MPI_COMM_WORLD rank: 0
+
+If you are *absolutely sure* that your application will successfully
+and correctly survive a call to fork(), you may disable this warning
+by setting the mpi_warn_on_fork MCA parameter to 0.
+--------------------------------------------------------------------------
+Thread 4 (Thread 0x2b662c319700 (LWP 84517)):
+#0  0x00000038076e1623 in select () from /lib64/libc.so.6
+#1  0x00002b661e3c1f25 in service_thread_start (context=0x0) at btl_openib_fd.c:381
+#2  0x0000003808207aa1 in start_thread () from /lib64/libpthread.so.0
+#3  0x00000038076e8bcd in clone () from /lib64/libc.so.6
+Thread 3 (Thread 0x2b66220a0700 (LWP 84512)):
+#0  0x00000038076e91c3 in epoll_wait () from /lib64/libc.so.6
+#1  0x00002b661ee6403f in mxm_async_thread_func (arg=<optimized out>) at mxm/core/async.c:316
+#2  0x0000003808207aa1 in start_thread () from /lib64/libpthread.so.0
+#3  0x00000038076e8bcd in clone () from /lib64/libc.so.6
+Thread 2 (Thread 0x2b6621249700 (LWP 84510)):
+#0  0x00000038076df383 in poll () from /lib64/libc.so.6
+#1  0x00002b66200d6a73 in poll_dispatch () from /opt/aci/sw/openmpi/1.10.1_gcc-5.3.1/lib/libopen-pal.so.13
+#2  0x00002b66200cb7eb in opal_libevent2021_event_base_loop () from /opt/aci/sw/openmpi/1.10.1_gcc-5.3.1/lib/libopen-pal.so.13
+#3  0x00002b661f3fc3d2 in orte_progress_thread_engine (obj=0x2b661f715840 <orte_progress_thread>) at base/ess_base_std_app.c:436
+#4  0x0000003808207aa1 in start_thread () from /lib64/libpthread.so.0
+#5  0x00000038076e8bcd in clone () from /lib64/libc.so.6
+Thread 1 (Thread 0x2b6621004c20 (LWP 84507)):
+#0  0x000000380820f2d3 in wait () from /lib64/libpthread.so.0
+#1  0x0000003814c1400d in ?? () from /usr//lib64/libgfortran.so.3
+#2  0x0000003814c1582e in ?? () from /usr//lib64/libgfortran.so.3
+#3  0x0000003814c15a81 in _gfortran_generate_error () from /usr//lib64/libgfortran.so.3
+#4  0x0000003814cba43c in ?? () from /usr//lib64/libgfortran.so.3
+#5  0x0000003814cbab53 in _gfortran_st_open () from /usr//lib64/libgfortran.so.3
+#6  0x0000000000403013 in suwt11_ ()
+#7  0x000000000042417a in MAIN__ ()
+#8  0x0000000000426081 in main ()
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code.. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[31175,1],0]
+  Exit code:    2
+--------------------------------------------------------------------------

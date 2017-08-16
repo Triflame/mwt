@@ -1,0 +1,7 @@
+2.0	sfsuread	data/model1/10HZ:	fresh@dkdot1x-239.ems.psu.edu	Wed Aug 16 14:29:15 2017
+
+	n2=201
+	data_format="native_int"
+	esize=4
+	in="/var/tmp/data/model1/10HZ/tfile@"
+	n1=91

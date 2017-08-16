@@ -1,0 +1,25 @@
+#PBS -S /bin/bash
+#PBS -o demo.txt         ## file for output
+#PBS -l nodes=1:ppn=2    ## request 2 processors on 2 nodes 
+#PBS -l walltime=10:00:00 ## request 10 hours to run a job
+##         ## request 2GB of memory per process
+##PBS -m abe              ## email you when job begin/end/abort
+##PBS -M yxy274@psu.edu
+#PBS -N modeling         ## job name
+#PBS -A tuz47_a_g_sc_default ## specify the allocation
+##PBS -j oe  
+## request regular output and terminal output 
+## go to the same file 
+
+cd $PBS_O_WORKDIR ## go to the dir where the job is submitted
+
+mpirun /storage/home/yxy274/yan/mwt/src/executables/a2d.x
+
+#mpirun -np 5 --mca btl_sm_use_knem 0 /storage/home/yxy274/yan/mwt/src/executables/a2d.x
+
+#cd /storage/home/yxy274/yan/mwt/run/modeling/model1
+
+#cd /uufs/geophys.utah.edu/common/tomofs/u0350255/mwt/run/model1/modeling
+
+#/uufs/landscapearch.arches/sys/pkg/mpich-mx/std/bin/mpirun -np 51 -machinefile ${PBS_NODEFILE} /uufs/geophys.utah.edu/common/tomofs/u0350255/mwt/src/executables/a2d.x
+

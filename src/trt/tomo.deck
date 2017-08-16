@@ -1,0 +1,64 @@
+#############################################################################
+#
+# Traveltime Tomography (2D).
+# by Jianming Sheng, May 2002.
+#
+# Usage: tomo_crosswell_0.0c job.deck
+#
+# The job deck is an ascii file with lines in the following format:
+#     parameter_name = parameter_value ...
+# Parameter names are described below.  Parameter values may be
+# integers, floating point or character strings.
+# 
+# Blanks, tabs, newlines, and comments serve as white space between
+# parameter values.  A comment starts at the character # and ends
+# at a newline.
+# 
+# Multiple parameter values may be assigned to the same name, for
+# example the list of segy input files.  They do not all have to
+# fit on the same line.  Commas may be used between parameters.
+# 
+# This document can be used as a starting template for a job deck.
+# The following descriptions show the parameter name and its
+# default value (if any).  Parameter fields that have defaults
+# are optional.  If a required field is missing, the program
+# will inform you and quit.  Parameter names are case insensitive.
+# Case is preserved for parameter values.
+#
+# PARAMETERS:
+#
+
+CoordFile=./COORD.DAT
+LogFile=./log.dat
+VfinalFile=./vel.
+RmsFile=./rms.dat
+ResidualFile=./res.
+RayFile=./ray.
+IsWaterBottomConstraint=0
+WaterBottomFile=./WB_BP.DAT
+XMIN=-4000.0
+XMAX=29000.0
+ZMIN=0.0
+ZMAX=8000.0
+VMIN=1000.0
+VMAX=7000.0
+NumbeOfSmooth=15
+ITER, IRSX, IRSZ 1=5,20,10
+ITER, IRSX, IRSZ 2=5,20,10
+ITER, IRSX, IRSZ 3=5,20,10
+ITER, IRSX, IRSZ 4=5,20,10
+ITER, IRSX, IRSZ 5=5,20,10
+ITER, IRSX, IRSZ 6=5,20,10
+ITER, IRSX, IRSZ 7=5,20,10
+ITER, IRSX, IRSZ 8=5,20,10
+ITER, IRSX, IRSZ 9=5,10,5
+ITER, IRSX, IRSZ 10=5,10,5
+ITER, IRSX, IRSZ 11=5,10,5
+ITER, IRSX, IRSZ 12=5,10,5
+ITER, IRSX, IRSZ 13=5,8,4
+ITER, IRSX, IRSZ 14=5,8,4
+ITER, IRSX, IRSZ 15=5,8,4
+Nite=100
+Dx=2.5
+#Dx=25.0
+##############################################################################

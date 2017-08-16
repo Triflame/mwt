@@ -1,0 +1,12 @@
+#!/bin/bash
+# read source wavelet input
+Flow('src','../../../run/modeling/model1/src.dat','echo in=${SOURCES[0]} n1=1251 d1=0.0008 o1=0 n2=1 data_format=float esize=4')
+Result('src', 'graph unit1=s label1=time')
+
+# read velocity file to plot
+#
+Flow('csg2','./csg2.su','suread suxdr=y endian=0 | put label1=time label2=distance unit1=s unit2=m')
+Result('csg2','grey scalebar=y color=i title="csg 2"')
+
+End()
+

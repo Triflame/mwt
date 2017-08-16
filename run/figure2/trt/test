@@ -1,0 +1,13 @@
+rm -f *.o core *.x
+mpicc tomo2d_mpi_new.c -o trt.x -lm
+mv trt.x ../executables
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ../../../src/executables/trt.x
+Node: comp-sc-0459
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+2 total processes failed to start

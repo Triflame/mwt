@@ -1,0 +1,14 @@
+#PBS -S /bin/bash
+#PBS -l nodes=1:ppn=2,walltime=01:00:00
+##PBS -m abe
+##PBS -M chaiwoot@cs.utah.edu
+#PBS -N ewt
+#PBS -A tuz47_a_g_sc_default
+#PBS -o test
+
+
+cd $PBS_O_WORKDIR
+
+#cp wtw_model.para ../../../src/inversion
+#cd ../../../src/inversion; make clean; make
+mpirun ../../../src/executables/ewt.x
