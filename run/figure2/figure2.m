@@ -45,11 +45,11 @@ vmwt = vmwt(:,201:301);
 colormap(gray)
 left = 650;
 top = -50;
-subplot(321);imagesc(x,z,vtrue,[1500 3000]);ylabel('Z (m)');colorbar;
+subplot(321);imagesc(x,z,vtrue,[1500 3000]);xlabel('X (m)');ylabel('Z (m)');colorbar;
 title('(a) True Velocity Model');text(left,top,'m/s');
-subplot(322);imagesc(x,z,vgrad,[1500 3000]);ylabel('Z (m)');colorbar;
+subplot(322);imagesc(x,z,vgrad,[1500 3000]);xlabel('X (m)');ylabel('Z (m)');colorbar;
 title('(b) Initial Velocity Model');text(left,top,'m/s');
-subplot(323);imagesc(x,z,vtrt,[1500 3000]);ylabel('Z (m)');colorbar;
+subplot(323);imagesc(x,z,vtrt,[1500 3000]);xlabel('X (m)');ylabel('Z (m)');colorbar;
 title('(c) TRT Tomogram');text(left,top,'m/s');
 subplot(324);imagesc(x,z,vewt,[1500 3000]);xlabel('X (m)');ylabel('Z (m)');colorbar;
 title('(d) EWT Tomogram');text(left,top,'m/s');
