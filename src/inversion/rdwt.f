@@ -141,7 +141,7 @@ c
       tracl = 0
       tracr = 0
 
-      open(40,file=inname,access='direct',recl=nlen*i4)
+      open(40,file=inname,access='direct',recl=nlen*i4) ! bug is here
       do itrace = 1,mx1
         tracl = tracl + 1
         tracr = tracr + 1

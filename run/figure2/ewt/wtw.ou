@@ -1,12 +1,12 @@
  COORD_TEMP=../../../model/model1/coord.dat                                                                                                                                                                         
  VEL_IN=../../../model/model1/vel_grad.dat                                                                                                                                                                      
  IS_SU_VELOCITY=           0
- Nx_IN,Nz_IN,Dx_IN=         501         101   5.0000000    
+ Nx_IN,Nz_IN,Dx_IN=         501         101   5.00000000    
  CSG_PRE_IN=../../../data/model1/10HZ/csg                                                                                                                                                                           
  CSG_SUFFIX_IN=.su                                                                                                                                                                                                     
- Nt_IN,Dt_IN,IS_SU_CSG=        3000  7.99999980E-04           1
- Nx_OUT,Nz_OUT,Dx_OUT=         501         101   5.0000000    
- Nt_OUT,Dt_OUT=        3000  7.99999980E-04
+ Nt_IN,Dt_IN,IS_SU_CSG=        3000   7.99999980E-04           1
+ Nx_OUT,Nz_OUT,Dx_OUT=         501         101   5.00000000    
+ Nt_OUT,Dt_OUT=        3000   7.99999980E-04
  SOURCE_IN=../../../data/wavelet/DT0.0008/src10.dat                                                                                                                                                                
  DENSITY_IN=                                                                                                                                                                                                        
  IS_SU_DENSITY=           0
@@ -18,19 +18,19 @@
  VEL_OU_SUFFIX=                                                                                                                                                                                                        
  GRAD_OU=./grad.dat                                                                                                                                                                                              
  ISMARINE,IS_RESET_SURFACE,IS_RESET_SG=           0           0           0
- DEPSOU,DEPREC=   10.000000       10.000000    
- NOPSOU,FREQ,NTPSOU,DTSOU=           1   10.000000            1251  1.55684259E-41
+ DEPSOU,DEPREC=   10.0000000       10.0000000    
+ NOPSOU,FREQ,NTPSOU,DTSOU=           1   10.0000000            1251   0.00000000    
  NTPAD=           1
- NDENS,DENCO,CP00,DENP=           1   310.00000       1.0000000      0.25000000    
+ NDENS,DENCO,CP00,DENP=           1   310.000000       1.00000000      0.250000000    
  NFREE=           1
  ITERATION,ITER00=         100           1
  NITE=          10
- IS_USE_CON1,DEPTH_CON1,VMIN_CON1,VMAX_CON1=           0   40.000000       1490.0000       1490.0000    
- DVMIN,DVMAX,VMIN,VMAX=   6.0000000       30.000000       1400.0000       3000.0000    
- XMIN,XMAX,ZMIN,ZMAX=   0.0000000       2500.0000       0.0000000       500.00000    
- OFFMIN,OFFMAX=   10.000000       990.00000    
+ IS_USE_CON1,DEPTH_CON1,VMIN_CON1,VMAX_CON1=           0   40.0000000       1490.00000       1490.00000    
+ DVMIN,DVMAX,VMIN,VMAX=   6.00000000       30.0000000       1400.00000       3000.00000    
+ XMIN,XMAX,ZMIN,ZMAX=   0.00000000       2500.00000       0.00000000       500.000000    
+ OFFMIN,OFFMAX=   10.0000000       990.000000    
  ISPRE,ISNORM,ISUSECONJUGATE,ISPRECONDITION=           1           0           0           0
  NSHOT_INT=           1
  INDEX_SHOT_OUTPUT=          51
  Ns=          51
- iter=           0  resddd=   23362.586    
+ iter=           0  resddd=   23362.5859    
